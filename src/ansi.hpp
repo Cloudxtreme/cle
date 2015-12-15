@@ -1,6 +1,8 @@
 #ifndef ANSI
 #define ANSI
 
+#include <string>
+
 // various ANSI escape codes for colorized output
 
 // reset to normal state
