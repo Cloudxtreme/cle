@@ -23,6 +23,9 @@ void printVersion();
 // internal variables //
 ////////////////////////
 bool colors_ = Config::colors;
+bool verbose_ = false;
+
+string entry_;
 
 ////////////////////////////////////////////////
 // parse and act on program arguments
@@ -33,6 +36,8 @@ int parseArgs(int argv, char** argc)
     if (argv < 2) {
         return 0;
     }
+
+    entry_ = string(argc[1]);
 
     for (int i = 1; i < argv; i++)
     {
@@ -48,6 +53,10 @@ int parseArgs(int argv, char** argc)
 
         else if (arg(argc[i], "-nc") || arg(argc[i], "--no-color")){
             colors_ = false;
+        }
+
+        else if (arg(argc[i], "-v") || arg(argc[i], "--verbose")){
+            verbose_ = true;
         }
 
         else if (i != 1){
@@ -67,6 +76,19 @@ bool colors()
     return colors_;
 }
 
+////////////////////////////////////////
+// return if verbose output is enabled
+bool verbose()
+{
+    return verbose_;
+}
+
+//////////////////////////////////////////////////
+// return the entry name provided to the program
+string entry()
+{
+    return entry_;
+}
 //////////////////////////////////////////
 // returns true if the C-str matches the 
 // string
@@ -89,6 +111,7 @@ void printUsage()
     print("-version, --version -> print version information and exit\n");
     print();
     print("-nc, --no-color -> disable colorized output\n");
+    print("-v, --verbose   -> enable verbose output\n");
     print();
 }
 
