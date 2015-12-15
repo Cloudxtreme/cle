@@ -3,4 +3,6 @@
 
 int parseArgs(int argv, char** argc);
 
+bool colors();
+
 #endif

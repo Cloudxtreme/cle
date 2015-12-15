@@ -1,11 +1,14 @@
 #include "args.hpp"
 
-#include <iostream>
 #include <string>
 
 #include "ansi.hpp"
+#include "config.hpp"
+#include "io.hpp"
 
-using std::cout;
+using IO::print;
+using IO::printc;
+
 using std::string;
 
 ////////////////////////
@@ -15,6 +18,11 @@ bool arg(char* argc, string str);
 
 void printUsage();
 void printVersion();
+
+////////////////////////
+// internal variables //
+////////////////////////
+bool colors_ = Config::colors;
 
 ////////////////////////////////////////////////
 // parse and act on program arguments
@@ -38,15 +46,25 @@ int parseArgs(int argv, char** argc)
             return 1;
         }
 
-        else{
-            cout << ANSI_RED;
-            cout << "unknown argument '" << argc[i] << "'\n";
-            cout << ANSI_RESET;
-            cout << "run pass --help for more information\n";
+        else if (arg(argc[i], "-nc") || arg(argc[i], "--no-color")){
+            colors_ = false;
+        }
+
+        else if (i != 1){
+            printc("unknown argument '" + string(argc[i]) + "'\n", 
+                    ANSI_RED);
+            print("run pass --help for more information\n");
         }
     }
 
     return 0;
+}
+
+//////////////////////////////////////////
+// return if colorized output is enabled
+bool colors()
+{
+    return colors_;
 }
 
 //////////////////////////////////////////
@@ -61,15 +79,23 @@ bool arg(char* argc, string str)
 // print program usage information
 void printUsage()
 {
-
+    printc("cle " + Config::vn + "\n", ANSI_BLUE);
+    print();
+    printc("syntax\n", ANSI_BLUE);
+    printc("cle <key> [arguments]\n", ANSI_WHITE);
+    print();
+    printc("arguments\n", ANSI_BLUE);
+    print("-h, --help          -> print usage and exit\n");
+    print("-version, --version -> print version information and exit\n");
+    print();
+    print("-nc, --no-color -> disable colorized output\n");
+    print();
 }
 
 //////////////////////////////////////
 // print program version information
 void printVersion()
 {
-    cout << ANSI_BLUE;
-    cout << "cle v0.1\n";
-    cout << "(C) 2015 phillip-h\n";
-    cout << ANSI_RESET;
+    printc("cle " + Config::vn + "\n", ANSI_BLUE);
+    printc("(C) 2015 phillip-h\n", ANSI_BLUE);
 }
