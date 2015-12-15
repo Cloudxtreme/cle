@@ -3,8 +3,14 @@
 
 #include <string>
 
-const std::string vn = "0.1";
+namespace Config
+{
 
-bool colors = true;
+// program version string
+const std::string vn = "v0.1";
 
+// default state of colorized output
+const bool colors = true;
+
+}
 #endif
