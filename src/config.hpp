@@ -3,6 +3,7 @@
 
 #include <string>
 
+// various global settings
 namespace Config
 {
 

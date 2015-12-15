@@ -53,7 +53,7 @@ int parseArgs(int argv, char** argc)
         else if (i != 1){
             printc("unknown argument '" + string(argc[i]) + "'\n", 
                     ANSI_RED);
-            print("run pass --help for more information\n");
+            print("run cle --help for more information\n");
         }
     }
 
