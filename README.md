@@ -1,6 +1,10 @@
 # cle
 A CLI password manager for linux
 
+![cle running in gnome-terminal](images/cle.png)
+
+cle running in gnome-terminal
+
 # About
 
 cle stores entries of passwords, emails, and a comment that are encypted with a master password. File names themselves are created by hashing the entry key with the master password 2048 times, meaning that without the master password you cannot even tell which entry a file corresponds to.
