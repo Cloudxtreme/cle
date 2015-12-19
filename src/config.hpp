@@ -23,5 +23,8 @@ const std::string FILE_DIR = ".cle";
 const int EXIT_NORMAL = 0;
 const int EXIT_NO_ENTRY = 1;
 
+const std::string checksumText = "checksum_:";
+const std::string saltText = "salted_:";
+
 }
 #endif

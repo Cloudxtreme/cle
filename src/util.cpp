@@ -1,11 +1,49 @@
 #include "util.hpp"
 
 #include <sstream>
+#include <stdlib.h>
+#include <time.h>
 
 #include "ansi.hpp"
 #include "config.hpp"
 #include "crypt.hpp"
 #include "io.hpp"
+
+using std::string;
+
+////////////////////////////////////
+// Util initilization, seed random 
+void Util::init()
+{
+    srand(time(nullptr));
+}
+
+////////////////////////////
+// return a random integer
+int Util::randInt()
+{
+    return rand();
+}
+
+///////////////////////////
+// generate a random salt
+unsigned char* Util::randSalt()
+{
+    unsigned char* salt = new unsigned char[8];
+    for (unsigned i = 0; i < 8; i++){
+        salt[i] = (unsigned char) randInt();
+    }
+    return salt;
+}
+
+//////////////////////////////////
+// fill an array with random data
+void Util::wipeArray(unsigned char* array, unsigned len)
+{
+    for (unsigned i = 0; i < len; i++){
+        array[i] = (unsigned char) randInt();
+    }
+}
 
 ///////////////////////////////////////////////
 // hash a string using SHA256 for HASH_ROUNDS
@@ -31,4 +69,16 @@ std::string Util::hexstr(unsigned char* data, unsigned len)
         ss << std::hex << (short) data[i];
     }
     return ss.str();
+}
+
+////////////////////////////////////////////
+// read in the salt from an encrypted file
+unsigned char* Util::readSalt(string path)
+{
+    unsigned char* salt = new unsigned char[8];
+    auto vec = IO::readBytes(path);
+    for (unsigned i = 0; i < 8; i++){
+        salt[i] = vec.at(Config::saltText.size() + i);
+    }
+    return salt;
 }

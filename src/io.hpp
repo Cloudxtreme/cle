@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 namespace IO
 {
@@ -17,6 +18,9 @@ namespace IO
     std::string prompt(std::string prompt_);
 
     void newKey(std::string path);
+
+    std::vector<unsigned char> readBytes(std::string path);
+    void writeBytes(std::vector<unsigned char> data, std::string path);
 }
 
 #endif

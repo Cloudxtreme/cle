@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <sys/stat.h>
 #include <vector>
 
@@ -109,9 +110,35 @@ void IO::newKey(string path)
         return;
     }
     
-    file << password << "\n";
-    file << email << "\n";
+    file << "password: " << password << "\n";
+    file << "email: " << email << "\n";
+    file << "\ncomment:\n";
     for (unsigned i = 0; i < comment.size(); i++){
         file << comment.at(i) << "\n";
     }
+}
+
+///////////////////////////////////
+// read a file into a byte vector
+vector<unsigned char> IO::readBytes(string path)
+{ 
+    path = string(getenv("HOME")) + "/" + Config::FILE_DIR + "/" + path;
+    vector<unsigned char> bytes; 
+    std::ifstream file(path, std::ios::binary);
+    file.unsetf(std::ios::skipws);
+
+    bytes.insert(bytes.begin(),
+                  std::istream_iterator<unsigned char>(file),
+                  std::istream_iterator<unsigned char>());
+    return bytes;
+}
+
+//////////////////////////////////////
+// write a vector of bytes to a file
+void IO::writeBytes(vector<unsigned char> bytes, string path)
+{    
+    path = string(getenv("HOME")) + "/" + Config::FILE_DIR + "/" + path;
+    std::ofstream file(path, std::ios::out | std::ios::binary);
+    file.write((const char*) bytes.data(), bytes.size());
+    file.close();
 }
