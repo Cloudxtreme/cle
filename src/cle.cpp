@@ -22,7 +22,6 @@ int main(int argv, char** argc)
     }
 
     Util::init();
-
     string key = entry();
     if (key.empty()){
         printc("no key provided!\n", ANSI_RED);
@@ -31,18 +30,19 @@ int main(int argv, char** argc)
     }
 
     printc("cle " + Config::vn + "\n", ANSI_BLUE);
-
     if (verbose()){
         print("opening entry " + entry() + "\n");             
     }
 
+    Util::hideText();
     print("enter passphrase > ");
     string pass = IO::readPass();
-    
+    Util::showText();
+    print();
+
     unsigned char* hash = new unsigned char[32];
     Util::fileHash((pass + key).c_str(), pass.size() + key.size(), hash);
     string path = Util::hexstr(hash, 32);
-
     if (verbose()){
         print("key hash:\n");
         print(path + "\n");

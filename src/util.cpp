@@ -2,7 +2,9 @@
 
 #include <sstream>
 #include <stdlib.h>
+#include <termios.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "ansi.hpp"
 #include "config.hpp"
@@ -82,3 +84,24 @@ unsigned char* Util::readSalt(string path)
     }
     return salt;
 }
+
+////////////////////////////////////
+// disable echoing of terminal text
+void Util::hideText()
+{
+    termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    tty.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+
+////////////////////////////////////
+// enable echoing of terminal text
+void Util::showText()
+{
+    termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    tty.c_lflag |= ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+//

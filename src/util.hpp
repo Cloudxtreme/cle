@@ -18,6 +18,9 @@ namespace Util
     std::string hexstr(unsigned char* data, unsigned len);
 
     unsigned char* readSalt(std::string path);
+
+    void hideText();
+    void showText();
 }
 
 #endif
