@@ -17,6 +17,8 @@ namespace IO
 
     std::string prompt(std::string prompt_);
 
+    void deleteFile(bool prompt, std::string path);
+
     void newKey(std::string path);
 
     std::vector<unsigned char> readBytes(std::string path);

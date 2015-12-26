@@ -5,6 +5,7 @@
 #include "ansi.hpp"
 #include "config.hpp"
 #include "io.hpp"
+#include "util.hpp"
 
 using IO::print;
 using IO::printc;
@@ -18,6 +19,9 @@ bool arg(char* argc, string str);
 
 void printUsage();
 void printVersion();
+
+void renameKey();
+void deleteKey();
 
 ////////////////////////
 // internal variables //
@@ -57,6 +61,16 @@ int parseArgs(int argv, char** argc)
 
         else if (arg(argc[i], "-v") || arg(argc[i], "--verbose")){
             verbose_ = true;
+        }
+
+        else if (arg(argc[i], "-r") || arg(argc[i], "--rename")){
+            renameKey();
+            return 1;
+        }
+
+        else if (arg(argc[i], "-d") || arg(argc[i] , "--delete")){
+            deleteKey(); 
+            return 1;
         }
 
         else if (i != 1){
@@ -111,6 +125,8 @@ void printUsage()
     print("-version, --version -> print version information and exit\n");
     print();
     print("-nc, --no-color -> disable colorized output\n");
+    print("-d, --delete -> delete the given key\n");
+    print("-r, --rename -> rename the given key\n");
     print("-v, --verbose   -> enable verbose output\n");
     print();
 }
@@ -121,4 +137,78 @@ void printVersion()
 {
     printc("cle " + Config::vn + "\n", ANSI_BLUE);
     printc("(C) 2015 phillip-h\n", ANSI_BLUE);
+}
+
+////////////////////////////////
+// interactivly rename the key
+void renameKey()
+{
+    Util::hideText();
+    print("enter passphrase > ");
+    string pass = IO::readPass();
+    Util::showText();
+    print();
+
+    string key = entry();
+    unsigned char* hash = new unsigned char[32];
+    Util::fileHash((pass + key).c_str(), pass.size() + key.size(), hash);
+    string path = Util::hexstr(hash, 32);
+
+    auto file = IO::readFile(path);
+    if (file.fail()){ 
+        printc("key does not exist under passphrase.\n", ANSI_RED);
+        return;
+    }
+
+    if (IO::prompt("rename key? [Y/n] > ") != "Y"){
+        print("not renaming.\n");
+        return;
+    }
+
+    string newKey = IO::prompt("enter new key name > ");
+    unsigned char* newHash = new unsigned char[32];
+    Util::fileHash((pass + newKey).c_str(), pass.size() + newKey.size(),
+                   newHash);
+    string newPath = Util::hexstr(newHash, 32);
+
+    if (verbose()){
+        print("new key hash:\n");  
+        print(newPath + "\n");
+    }
+
+    auto temp = IO::readFile(newPath);
+    if (!temp.fail()){
+        printc("new key name already exists!\n", ANSI_RED);
+        print("maybe remove it first?\n");
+        return;
+    }
+    IO::writeBytes(IO::readBytes(path), newPath);
+    print("key renamed.\n");
+    
+    IO::deleteFile(false, path);
+}
+
+//////////////////////////////////////
+// prompt the user for confirmation,
+// then delete the key
+void deleteKey()
+{
+    Util::hideText();
+    print("enter passphrase > ");
+    string pass = IO::readPass();
+    Util::showText();
+    print();
+
+    string key = entry();
+    unsigned char* hash = new unsigned char[32];
+    Util::fileHash((pass + key).c_str(), pass.size() + key.size(), hash);
+    string path = Util::hexstr(hash, 32);
+    
+    auto file = IO::readFile(path);
+    if (file.fail()){ 
+        printc("key does not exist under passphrase.\n", ANSI_RED);
+        return;
+    }
+
+    IO::deleteFile(true, path);
 }

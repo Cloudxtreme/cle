@@ -1,5 +1,6 @@
 #include "io.hpp"
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -141,4 +142,26 @@ void IO::writeBytes(vector<unsigned char> bytes, string path)
     std::ofstream file(path, std::ios::out | std::ios::binary);
     file.write((const char*) bytes.data(), bytes.size());
     file.close();
+}
+
+////////////////////////////////////////////
+// delete a file
+// if prompt is true, the user will be
+// prompted if they actually want to delete
+void IO::deleteFile(bool prompt, string path)
+{
+    if (prompt && IO::prompt("delete file? [Y/n] > ") != "Y"){
+        print("not deleting.\n");
+        return;
+    }
+
+    path = string(getenv("HOME")) + "/" + Config::FILE_DIR + "/" + path;
+
+    if (remove(path.c_str()) != 0){
+        printc("error deleting file!\n", ANSI_RED);
+    } else {
+        if (verbose()){
+            print("file deleted.\n");
+        }
+    }
 }
