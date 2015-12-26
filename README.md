@@ -23,6 +23,14 @@ Clone and run `make` to build. Requires openssl development libraries.
 You should be able to install this in most package managers by
 installing `libssl-dev`.
 
+The program can be installed to `/usr/local/bin` by running `make
+install`, and can be removed by running `make remove`.
+
+There are bash completions for this program provided in
+`completion/clec`. This file can be installed by running `make
+install`, or by simply copying it somewhere it will be sourced by
+bash.
+
 # Syntax
 
 `cle <key name> [arguments]`
