@@ -124,8 +124,8 @@ void printUsage()
     print("-h, --help          -> print usage and exit\n");
     print("-version, --version -> print version information and exit\n");
     print();
+    print("-d, --delete -> delete the given key\n");  
     print("-nc, --no-color -> disable colorized output\n");
-    print("-d, --delete -> delete the given key\n");
     print("-r, --rename -> rename the given key\n");
     print("-v, --verbose   -> enable verbose output\n");
     print();
