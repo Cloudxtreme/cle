@@ -8,7 +8,7 @@ namespace Config
 {
 
 // program version string
-const std::string vn = "v0.1";
+const std::string vn = "v0.2";
 
 // default state of colorized output
 const bool colors = true;
